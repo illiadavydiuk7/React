@@ -2,6 +2,6 @@
   "name": "react-labs",
   "private": true,
   "workspaces": [
-    "react-lab-*"
+    "lab-*"
   ]
 }

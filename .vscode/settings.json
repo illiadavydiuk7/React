@@ -4,5 +4,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "eslint.workingDirectories": [{ "pattern": "./react-lab-*/" }]
+  "eslint.workingDirectories": [{ "pattern": "./lab-*/" }]
 }
