@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import SearchBar from './SearchBar.jsx'
+import { menu } from '../data.js'
 import MenuTable from './MenuTable.jsx'
 
-export default function FilterableMenuTable({ menu }) {
+export default function FilterableMenuTable() {
   const [filterText, setFilterText] = useState(
     () => localStorage.getItem('menu.filterText') ?? '',
   )
