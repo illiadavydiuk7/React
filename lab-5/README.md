@@ -31,4 +31,4 @@ components render**.
 | Ім'я (§4.3)     | Ні             | У браузері (DOM-елемент `<input>`) | ні                                                     |
 | Коментар (§4.3) | Так            | У стані BookingForm (comment)      | Так                                                    |
 | Гості (§4.5)    | Ні             | У стані GuestsStepper (guests)     | Ні (рендериться лише сам GuestsStepper)                |
-| Гості (§4.6)    |                |                                    |                                                        |
+| Гості (§4.6)    | Так            | У стані BookingForm (guests)       | Так                                                    |
