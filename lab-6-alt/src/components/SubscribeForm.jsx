@@ -1,9 +1,12 @@
 import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
-import { z } from 'zod'
+import * as yup from 'yup'
 import { subscribe } from '../api.js'
 
-const emailSchema = z.email('Вкажіть адресу на кшталт olena@gmail.com')
+const emailSchema = yup
+  .string()
+  .email('Вкажіть адресу на кшталт olena@gmail.com')
+  .required('Вкажіть адресу на кшталт olena@gmail.com')
 
 function SubmitButton() {
   const { pending } = useFormStatus()
@@ -16,11 +19,12 @@ function SubmitButton() {
 
 async function subscribeAction(previousState, formData) {
   const email = formData.get('email')
-  const result = emailSchema.safeParse(email)
-  if (!result.success) {
-    return { ok: false, message: result.error.issues[0].message }
+  try {
+    const validEmail = await emailSchema.validate(email)
+    return subscribe(validEmail)
+  } catch (err) {
+    return { ok: false, message: err.message, email }
   }
-  return subscribe(result.data)
 }
 
 export default function SubscribeForm() {
@@ -34,6 +38,7 @@ export default function SubscribeForm() {
           type="email"
           name="email"
           autoComplete="email"
+          defaultValue={state?.email}
           aria-invalid={state?.ok === false ? 'true' : 'false'}
           aria-describedby="subscribe-status"
         />
