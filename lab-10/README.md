@@ -28,10 +28,10 @@ dependency-cruiser і Steiger перевіряють правила кожної
 
 - код ЛР-8, уже готовий: `Tabs` з ролями й клавіатурою за APG, HOC
   `withAnalytics`, таймери, відгуки й «Схожі товари»;
-- маршрутизатор на адресі після `#`: хук `useRoute`, адреси сторінок у
-  `src/utils/paths.js` і компонент `Link`;
-- кошик: сховище `src/store/cartStore.js` у `localStorage` і хук
-  `useCart`;
+- маршрутизатор на адресі після `#`: хук `src/app/useRoute.js`, адреси
+  сторінок у `src/shared/paths.js` і компонент `Link`;
+- кошик: сховище `src/shared/cartStore.js` у `localStorage` і хук
+  `src/shared/useCart.js`;
 - тести Vitest і React Testing Library в `tests/`. Застосунок вони
   імпортують як `#app` (поле `imports` у `package.json`), тому переміщення
   файлів у `src/` їх не ламає. Файли в `tests/` не змінюйте;
@@ -40,7 +40,7 @@ dependency-cruiser і Steiger перевіряють правила кожної
 - `jsconfig.json` — з ним редактор оновлює імпорти в усіх файлах, коли
   ви переміщуєте файл. Не видаляйте його;
 - `STRUCTURES.md` — дві таблиці, які ви заповните;
-- стилі всього застосунку в `src/index.css`.
+- стилі всього застосунку в `src/app/index.css`.
 
 ## Команди
 
