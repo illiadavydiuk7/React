@@ -1,7 +1,7 @@
-import BeanCard from '../../shared/BeanCard.jsx'
-import { beans } from '../../shared/beans.js'
+import BeanCard from '../../../components/BeanCard.jsx'
+import { beans } from '../../../lib/beans.js'
 
-export default function CatalogPage() {
+export default function CatalogView() {
   return (
     <>
       <h1>Кава в зернах</h1>
