@@ -29,9 +29,9 @@ dependency-cruiser і Steiger перевіряють правила кожної
 - код ЛР-8, уже готовий: `Tabs` з ролями й клавіатурою за APG, HOC
   `withAnalytics`, таймери, відгуки й «Схожі товари»;
 - маршрутизатор на адресі після `#`: хук `src/app/useRoute.js`, адреси
-  сторінок у `src/utils/paths.js` і компонент `Link`;
-- кошик: сховище `src/stores/cartStore.js` у `localStorage` і хук
-  `src/hooks/useCart.js`;
+  сторінок у `src/shared/config/paths.js` і компонент `Link`;
+- кошик: модель `src/entities/cart/model/cartStore.js` у `localStorage` і
+  хук `src/entities/cart/model/useCart.js`;
 - тести Vitest і React Testing Library в `tests/`. Застосунок вони
   імпортують як `#app` (поле `imports` у `package.json`), тому переміщення
   файлів у `src/` їх не ламає. Файли в `tests/` не змінюйте;
