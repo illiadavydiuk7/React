@@ -30,8 +30,8 @@ dependency-cruiser і Steiger перевіряють правила кожної
   `withAnalytics`, таймери, відгуки й «Схожі товари»;
 - маршрутизатор на адресі після `#`: хук `src/app/useRoute.js`, адреси
   сторінок у `src/shared/config/paths.js` і компонент `Link`;
-- кошик: модель `src/entities/cart/model/cartStore.js` у `localStorage` і
-  хук `src/entities/cart/model/useCart.js`;
+- кошик: локальний пакет `packages/cart/` з API `@coffee/cart`, сховищем і
+  хуком у `state/` та компонентом `CartLine` у `ui/`;
 - тести Vitest і React Testing Library в `tests/`. Застосунок вони
   імпортують як `#app` (поле `imports` у `package.json`), тому переміщення
   файлів у `src/` їх не ламає. Файли в `tests/` не змінюйте;

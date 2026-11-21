@@ -1,5 +1,4 @@
-import { CartLine } from '../../../features/cart/index.js'
-import { useCart } from '../../../entities/cart/index.js'
+import { CartLine, useCart } from '@coffee/cart'
 import { Link } from '../../../shared/ui/index.js'
 import { paths } from '../../../shared/config/index.js'
 

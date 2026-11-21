@@ -1,4 +1,4 @@
-import { useCart } from '../../../entities/cart/index.js'
+import { useCart } from '@coffee/cart'
 import { withAnalytics } from '../../../shared/lib/index.js'
 import { Button } from '../../../shared/ui/index.js'
 
