@@ -1,7 +1,8 @@
 import { useId, useReducer, useRef } from 'react'
-import { drinks, priceOf } from '../data/menu.js'
+import { drinks, hasStopped, priceOf } from '../data/menu.js'
 import { draftReducer, emptyDraft } from '../model/draftReducer.js'
 import { useQueueDispatch } from '../model/queueContext.js'
+import { useStopList } from '../model/stopListContext.js'
 import DraftItem from './DraftItem.jsx'
 
 export default function OrderComposer() {
@@ -9,7 +10,11 @@ export default function OrderComposer() {
   const nameRef = useRef(null)
   const [draft, dispatch] = useReducer(draftReducer, emptyDraft)
   const queueDispatch = useQueueDispatch()
+  const { stopped } = useStopList()
   const total = draft.items.reduce((sum, item) => sum + priceOf(item), 0)
+  const containsStoppedItems = draft.items.some((item) =>
+    hasStopped(item, stopped),
+  )
 
   function handleNameChange(e) {
     dispatch({ type: 'customer_changed', name: e.target.value })
@@ -38,7 +43,10 @@ export default function OrderComposer() {
     nameRef.current.focus()
   }
 
-  const canPlace = draft.customerName.trim() !== '' && draft.items.length > 0
+  const canPlace =
+    draft.customerName.trim() !== '' &&
+    draft.items.length > 0 &&
+    !containsStoppedItems
 
   return (
     <form
@@ -61,6 +69,7 @@ export default function OrderComposer() {
           <button
             key={drink.name}
             type="button"
+            disabled={stopped.includes(drink.name)}
             onClick={() => handleAddDrink(drink.name)}
           >
             + {drink.name}
@@ -89,6 +98,9 @@ export default function OrderComposer() {
             </li>
           ))}
         </ul>
+      )}
+      {containsStoppedItems && (
+        <p className="stop-note">У замовленні є позиції зі стоп-листа</p>
       )}
       <p className="total">Разом: {total} грн</p>
       <button type="submit" className="primary" disabled={!canPlace}>
