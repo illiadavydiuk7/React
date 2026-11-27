@@ -1,40 +1,49 @@
-import { createContext, use } from 'react'
+import { createContext, use, useSyncExternalStore } from 'react'
 
 /**
- * Контексти черги замовлень і хуки, які їх читають.
+ * Контекст Redux store черги й хуки, які читають його стан та dispatch.
  *
- * §4.4. Створіть і експортуйте тут два контексти, кожен через
- * createContext(null):
- *   QueueContext          значення — { queue, canUndo, canRedo }: стан
- *                         черги (present з історії) і чи є що скасувати
- *                         й повторити;
- *   QueueDispatchContext  значення — dispatch ред'юсера черги.
- *
- * §4.5. Хуки для компонентів. Кожен читає свій контекст, а якщо компонент
- * рендериться не всередині <QueueProvider>, кидає помилку, у тексті якої
- * названо QueueProvider.
- *
- * Поки що хуки кидають помилку. Вимоги — у тестах
- * tests/queueContext.test.jsx і tests/QueueProvider.test.jsx.
+ * QueueProvider передає через нього окремий Redux store для кожного свого
+ * екземпляра. Поза провайдером хуки кидають зрозумілу помилку.
  */
 
 export const QueueContext = createContext(null)
-export const QueueDispatchContext = createContext(null)
 
 /** { queue, canUndo, canRedo } з найближчого QueueProvider. */
 export function useQueue() {
-  const queue = use(QueueContext)
-  if (queue === null) {
+  const store = use(QueueContext)
+  const state = useSyncExternalStore(
+    store?.subscribe ?? subscribeToNothing,
+    store?.getState ?? getEmptyState,
+    store?.getState ?? getEmptyState,
+  )
+
+  if (store === null) {
     throw new Error('useQueue must be used within a QueueProvider')
   }
-  return queue
+  const { present, past, future } = state
+  return {
+    queue: present,
+    canUndo: past.length > 0,
+    canRedo: future.length > 0,
+  }
 }
 
 /** dispatch ред'юсера черги з найближчого QueueProvider. */
 export function useQueueDispatch() {
-  const dispatch = use(QueueDispatchContext)
-  if (dispatch === null) {
+  const store = use(QueueContext)
+  if (store === null) {
     throw new Error('useQueueDispatch must be used within a QueueProvider')
   }
-  return dispatch
+  return store.dispatch
+}
+
+const emptyState = { past: [], present: null, future: [] }
+
+function getEmptyState() {
+  return emptyState
+}
+
+function subscribeToNothing() {
+  return () => {}
 }

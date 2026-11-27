@@ -1,32 +1,25 @@
-import { useReducer } from 'react'
+import { useState } from 'react'
+import { configureStore } from '@reduxjs/toolkit'
 import { loadOrders } from '../data/orders.js'
 import { createInitialState, queueReducer } from './queueReducer.js'
-import { QueueContext, QueueDispatchContext } from './queueContext.js'
+import { QueueContext } from './queueContext.js'
 import { createHistory, withUndo } from './withUndo.js'
 
 /**
- * §4.5. Провайдер черги: компонент, який зберігає стан черги в useReducer
- * з withUndo(queueReducer), як зараз App, і передає його через
- * QueueContext і QueueDispatchContext компонентам, отриманим як children.
+ * §4.9. Провайдер створює окреме Redux store для кожного свого екземпляра
+ * та передає його дочірнім компонентам через QueueContext.
  *
  */
 const undoableQueue = withUndo(queueReducer)
 
 export default function QueueProvider({ children }) {
-  const [history, dispatch] = useReducer(undoableQueue, null, () =>
-    createHistory(createInitialState(loadOrders())),
-  )
-  const queue = history.present
+  const [store] = useState(() => {
+    const initialState = createHistory(createInitialState(loadOrders()))
+    const reducer = (state = initialState, action) =>
+      action.type.startsWith('@@') ? state : undoableQueue(state, action)
 
-  return (
-    <QueueContext
-      value={{
-        queue,
-        canUndo: history.past.length > 0,
-        canRedo: history.future.length > 0,
-      }}
-    >
-      <QueueDispatchContext value={dispatch}>{children}</QueueDispatchContext>
-    </QueueContext>
-  )
+    return configureStore({ reducer, preloadedState: initialState })
+  })
+
+  return <QueueContext value={store}>{children}</QueueContext>
 }
