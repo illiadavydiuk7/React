@@ -2,8 +2,6 @@ import RootLayout from './RootLayout.jsx'
 import { guestOnly, requireUser } from './authMiddleware.js'
 import AccountLayout from '../routes/account/AccountLayout.jsx'
 import ProfilePage from '../routes/account/ProfilePage.jsx'
-import TicketsPage from '../routes/account/TicketsPage.jsx'
-import BookingPage from '../routes/booking/BookingPage.jsx'
 import LoginPage from '../routes/login/LoginPage.jsx'
 import MoviePage from '../routes/movie/MoviePage.jsx'
 import MoviesPage from '../routes/movies/MoviesPage.jsx'
@@ -36,10 +34,22 @@ export const routes = [
             Component: AccountLayout,
             children: [
               { index: true, Component: ProfilePage },
-              { path: 'tickets', Component: TicketsPage },
+              {
+                path: 'tickets',
+                lazy: {
+                  Component: async () =>
+                    (await import('../routes/account/TicketsPage.jsx')).default,
+                },
+              },
             ],
           },
-          { path: 'booking/:sessionId', Component: BookingPage },
+          {
+            path: 'booking/:sessionId',
+            lazy: {
+              Component: async () =>
+                (await import('../routes/booking/BookingPage.jsx')).default,
+            },
+          },
         ],
       },
       { path: '*', Component: NotFoundPage },
