@@ -1,7 +1,12 @@
+import { useNavigate, useSearchParams } from 'react-router'
 import { useState } from 'react'
 import { signIn } from '../../shared/auth/session.js'
+import { safeRedirect } from '../../shared/utils/safeRedirect.js'
 
 export default function LoginPage() {
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectTo = safeRedirect(searchParams.get('redirectTo'))
   const [error, setError] = useState(null)
   const [pending, setPending] = useState(false)
 
@@ -12,7 +17,7 @@ export default function LoginPage() {
     setPending(true)
     try {
       await signIn(form.get('email'), form.get('password'))
-      // §4.6: тут перехід туди, куди користувач ішов перед входом.
+      navigate(redirectTo, { replace: true })
     } catch (err) {
       setError(err.message)
     } finally {
